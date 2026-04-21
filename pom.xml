@@ -28,33 +28,7 @@
     </modules>
 
     <dependencies>
-        <dependency>
-            <groupId>com.yonyou.iuap</groupId>
-            <artifactId>iuap-ap-basedoc-sdk</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.yonyou.ctp</groupId>
-            <artifactId>yonbip-ctm-stwb_pub-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.interceptor</groupId>
-            <artifactId>javax.interceptor-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.yonyou.iuap</groupId>-->
-<!--            <artifactId>iuap-ap-mlruntime-impl</artifactId>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
+
     </dependencies>
 
     <dependencyManagement>
