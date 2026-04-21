@@ -1,0 +1,15 @@
+stages:
+- sqlcheck
+sqlcheck-job:
+  stage: sqlcheck
+  tags:
+  - checksql
+  only:
+    refs:
+    - branches
+    - merge_requests
+  script:
+  - echo "start gitrunner-pipeline"
+  - \cp -f /home/gitlab-runner/sqlcheck.sh ./
+  - chmod u+x sqlcheck.sh
+  - ./sqlcheck.sh
