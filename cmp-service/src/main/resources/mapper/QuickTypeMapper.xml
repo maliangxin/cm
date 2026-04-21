@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yonyoucloud.fi.cmp.mapper.QuickTypeMapper">
+
+    <select id="getReceivebillQuickTypeCode" parameterType="java.lang.Long" resultType="java.util.HashMap">
+        select cDefaultValue from billitem_base
+        <where>
+            ibillid = (select id from bill_base where cbillno = 'cmp_receivebill' and tenant_id = #{tenantid})
+            and  cFieldName='quickType.code' and cDataSourceName='cmp.receivebill.ReceiveBill_b'
+            <if test="tplid != null">
+                and iTplId = #{tplid}
+            </if>
+        limit 1;
+        </where>
+    </select>
+
+    <select id="getPaybillQuickTypeCode" parameterType="java.lang.Long" resultType="java.util.HashMap">
+        select cDefaultValue from billitem_base
+        <where>
+            ibillid = (select id from bill_base where cbillno = 'cmp_payment' and tenant_id = #{tenantid})
+            and cFieldName='quickType.code' and cDataSourceName='cmp.paybill.PayBillb'
+            <if test="tplid != null">
+                and iTplId = #{tplid}
+            </if>
+        limit 1;
+        </where>
+    </select>
+
+    <select id="getPayApplyBillQuickTypeCode" parameterType="java.lang.Long" resultType="java.util.HashMap">
+        select cDefaultValue from billitem_base
+        <where>
+            ibillid = (select id from bill_base where cbillno = 'cmp_payapplicationbill' and tenant_id = #{tenantid})
+            and cFieldName='quickType.code' and cDataSourceName='cmp.payapplicationbill.PayApplicationBill_b'
+            <if test="tplid != null">
+                and iTplId = #{tplid}
+            </if>
+        limit 1;
+        </where>
+    </select>
+
+    <select id="getFundPaymentQuickTypeCode" parameterType="java.lang.Long" resultType="java.util.HashMap">
+        select cDefaultValue from billitem_base
+        <where>
+            ibillid = (select id from bill_base where cbillno = 'cmp_fundPayment' and tenant_id = #{tenantid})
+            and cFieldName='quickType.code' and cDataSourceName='cmp.fundpayment.FundPayment_b' limit 1;
+        </where>
+    </select>
+
+    <select id="getFundCollectionQuickTypeCode" parameterType="java.lang.Long" resultType="java.util.HashMap">
+        select cDefaultValue from billitem_base
+        <where>
+            ibillid = (select id from bill_base where cbillno = 'cmp_fundcollection' and tenant_id = #{tenantid})
+            and cFieldName='quickType.code' and cDataSourceName='cmp.fundcollection.FundCollection_b' limit 1;
+        </where>
+    </select>
+
+
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yonyoucloud.fi.cmp.mapper.PaybillMapper">
+
+    <update id="updatePayStatus" parameterType="java.util.HashMap">
+        update cmp_paybill
+        <set>
+            pubts = pubts,
+            paystatus = #{paystatus}
+        </set>
+        <where>
+            paystatus = #{item} and
+            porderId = #{porderId}  and
+            id = #{id} and tenant_id = #{tenant_id}
+        </where>
+
+    </update>
+
+    <update id="batchUpdatePaybill" parameterType="java.util.List">
+        <foreach collection="list" item="paybill" index="index" open="" close="" separator=";">
+            UPDATE cmp_paybill
+            <set>
+                <!--<choose>
+                    <when test=""></when>
+                    <otherwise></otherwise>
+                </choose>-->
+                voucherstatus =
+                (
+                case when voucherstatus = #{paybill.oldvoucherstatus}  then #{paybill.voucherstatus}
+                else  voucherstatus end
+                ),
+                paystatus = #{paybill.paystatus},
+                payman = #{paybill.payman},
+                settledate = #{paybill.settledate},
+                paydate = #{paybill.paydate},
+                settlestatus = #{paybill.settlestatus},
+                dzdate = #{paybill.dzdate}
+            </set>
+            <where>
+                id = #{paybill.id}
+            </where>
+        </foreach>
+    </update>
+
+
+</mapper>

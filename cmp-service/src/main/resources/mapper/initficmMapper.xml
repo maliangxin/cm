@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀)
+ -->
+<mapper namespace="com.yonyoucloud.fi.ficm.mapper.initficmMapper">
+
+    <insert id="initDenominationsettingCNY" parameterType="map">
+		INSERT INTO `cmp_denominationsetting`(`currency`, `currency_denomination`, `baseUnit`, `id`,  `create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES (#{currency}, '100元;50元;20元;10元;5元;1元;5角;1角;', '元', (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+      INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('100元', 100.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1,(select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(), #{tenantId}, #{ytenantId});
+
+      INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`,`create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('50元', 50.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`,`create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES ('20元', 20.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`,  `create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES ('10元', 10.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(), #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES ('5元', 5.00000000,  (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(), #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES ('1元', 1.00000000,  (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(), #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES ('5角', 0.50000000,(select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES ('1角', 0.10000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+	</insert>
+
+    <insert id="initDenominationsettingUSD" parameterType="map">
+		 INSERT INTO `cmp_denominationsetting`(`currency`, `currency_denomination`, `baseUnit`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES (#{currency}, '100美元;50美元;20美元;10美元;5美元;1美元;50分;25分;10分;5分;1分;', '美元', (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting) a), NOW(), NOW(), NOW(), NOW(), #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('100美元', 100.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES ('50美元', 50.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(), #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('20美元', 20.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES ('10美元', 10.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`,`create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES ('5美元', 5.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),   #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES ('1美元', 1.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(), #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`,  `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('50分', 0.50000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('25分', 0.25000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),   #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('10分', 0.10000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`,`create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES ('5分', 0.05000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(), #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('1分', 0.01000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+	</insert>
+
+    <insert id="initDenominationsettingHKD" parameterType="map">
+		 INSERT INTO `cmp_denominationsetting`(`currency`, `currency_denomination`, `baseUnit`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES (#{currency}, '1000元;500元;100元;50元;20元;10元;5元;2元;1元;5毫;2毫;1毫;', '港元', (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting) a), NOW(), NOW(), NOW(), NOW(), #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES ('1000元', 1000.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`,`tenant_id`, `ytenant_id`) VALUES ('500元', 500.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('100元', 100.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),   #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('50元', 50.00000000,(select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),   #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES ('20元', 20.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(), #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES ('10元', 10.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(), #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES ('5元', 5.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`,`create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('2元', 2.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),#{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`,`create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('1元', 1.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(), #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`,`tenant_id`, `ytenant_id`) VALUES ('5毫', 0.50000000,(select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('2毫', 0.20000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES ('1毫', 0.10000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+	</insert>
+
+    <insert id="initDenominationsettingJPY" parameterType="map">
+		 INSERT INTO `cmp_denominationsetting`(`currency`, `currency_denomination`, `baseUnit`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES (#{currency}, '10000日元;5000日元;2000日元;1000日元;500日元;100日元;50日元;10日元;5日元;1日元;', '日元', (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting) a), NOW(), NOW(), NOW(), NOW(), #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('10000日元', 10000.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),   #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('5000日元', 5000.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('2000日元', 2000.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('1000日元', 1000.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('500日元', 500.00000000,  (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('100日元', 100.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('50日元', 50.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`, `create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('10日元', 10.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`,`create_time`, `create_date`, `modify_time`, `modify_date`, `tenant_id`, `ytenant_id`) VALUES ('5日元', 5.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),   #{tenantId}, #{ytenantId});
+
+    INSERT INTO `cmp_denominationsetting_b`(`currency_denomination`, `conversion_unit`, `mainid`, `status`, `id`,`create_time`, `create_date`, `modify_time`, `modify_date`,  `tenant_id`, `ytenant_id`) VALUES ('1日元', 1.00000000, (select id FROM cmp_denominationsetting WHERE currency=#{currency} and ytenant_id=#{ytenantId} limit 1), 1, (select a.id from (select ifnull(max(id),0)+2 as id from cmp_denominationsetting_b) a),  NOW(), NOW(), NOW(), NOW(),  #{tenantId}, #{ytenantId});
+
+	</insert>
+
+    <insert id="initAutoCorrSetting" parameterType="map">
+
+        INSERT INTO `cmp_autocorr_setting`(`id`,`exorder`, `busdocumenttype`, `bankreccode`, `ourbanknum`, `othbanknum`, `money`, `abstract`, `ytenant_id`, `floatdays`, `create_time`, `create_date`, `modify_time`, `modify_date`, `creator`, `modifier`, `creatorId`, `modifierId`, `tenant_id`, `pubts`, `direction`) values (#{idCredit},1,2,1,1,1,1,1,#{ytenantid},0.00,NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,#{tenantid},#{pubts},'2');
+
+        INSERT INTO `cmp_autocorr_setting`(`id`,`exorder`, `busdocumenttype`, `bankreccode`, `ourbanknum`, `othbanknum`, `money`, `abstract`, `ytenant_id`, `floatdays`, `create_time`, `create_date`, `modify_time`, `modify_date`, `creator`, `modifier`, `creatorId`, `modifierId`, `tenant_id`, `pubts`, `direction`) values (#{idDebit},1,2,1,1,1,1,1,#{ytenantid},0.00,NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,#{tenantid},#{pubts},'1');
+    </insert>
+
+    <select id="getAutoCorrSetting" parameterType="map" resultType="Long">
+        select id from cmp_autocorr_setting where tenant_id =#{tenantid} and ytenant_id=#{ytenantid} limit 1
+    </select>
+
+    <select id="getInitCount" parameterType="map" resultType="Long">
+         select id from cmp_denominationsetting where currency=#{currency} and ytenant_id=#{ytenantId} limit 1
+    </select>
+
+</mapper>

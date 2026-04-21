@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yonyoucloud.fi.cmp.mapper.InitDataMapper">
+
+    <update id="updateInitDataAccount" parameterType="java.util.HashMap">
+        update cmp_initdata set
+        <if test = "orisum != null and localsum != null">
+            cobookoribalance = cobookoribalance + #{orisum},
+            cobooklocalbalance = cobooklocalbalance + #{localsum}
+        </if>
+        <if test = "orisum != null and localsum != null and oriSumunsettled != null and natSumunsettled != null">
+            ,
+        </if>
+        <if test = "oriSumsettled != null and natSumsettled != null">
+             cobookoribalancesettled = cobookoribalancesettled + #{oriSumsettled},
+            cobooklocalbalancesettled =cobooklocalbalancesettled + #{natSumsettled}
+        </if>
+        where id = #{id} and ytenant_id = #{ytenant_id}
+    </update>
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.yonyoucloud.fi.cmp.mapper.PullBankReconcliationMapper">
+    <update id="updatePullBank" parameterType="java.util.HashMap">
+        update cmp_bankreconciliation
+        <set>
+            ispublish = #{ispublish},
+            pubts = pubts
+        </set>
+        <where>
+            id = #{id} and amounttobeclaimed = 0 and  ispublish = 0 and (claimamount = 0 or claimamount is null)
+        </where>
+    </update>
+
+</mapper>

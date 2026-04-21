@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yonyoucloud.fi.cmp.mapper.UpdateCheckFlagMapper">
+
+    <select id="queryChecknoJournal" parameterType="java.util.List" resultType="java.lang.String">
+        select checkno from cmp_journal
+        <where>
+            id in
+            <foreach item="item" index="index" collection="list" open="("
+                     separator="," close=")">
+                #{item.id}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="queryChecknoBank" parameterType="java.util.List" resultType="java.lang.String">
+        select checkno from cmp_bankreconciliation
+        <where>
+            id in
+            <foreach item="item" index="index" collection="list" open="("
+                     separator="," close=")">
+                #{item.id}
+            </foreach>
+        </where>
+    </select>
+
+    <update id="updateJournalFalse" parameterType="java.util.HashMap" >
+        update cmp_journal
+        <set>
+            checkno = null ,
+            checkman = null ,
+            checkdate= null ,
+            checktime= null ,
+            bankreconciliationsettingid = null,
+            checkflag = false
+        </set>
+        <where>
+            ytenant_id = #{ytenant_id} and
+            checkno in
+            <foreach item="item" index="index" collection="checknos" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="updateBankreconciliationFalse" parameterType="java.util.HashMap">
+        update cmp_bankreconciliation
+        <set>
+            checkno = null ,
+            checkman = null ,
+            checkdate= null ,
+            checktime= null ,
+            bankreconciliationsettingid = null,
+            checkflag = false
+        </set>
+        <where>
+            ytenant_id = #{ytenant_id} and
+            checkno in
+            <foreach item="item" index="index" collection="checknos" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="updateOtherBankreconciliationFalse" parameterType="java.util.HashMap">
+        update cmp_bankreconciliation
+        <set>
+            other_checkno = null ,
+            gl_bankreconciliationsettingid = null,
+            other_checkdate= null ,
+            other_checktime= null ,
+            other_checkflag = false
+        </set>
+        <where>
+            ytenant_id = #{ytenant_id} and
+            other_checkno in
+            <foreach item="item" index="index" collection="checknos" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="updateJournalcheckmatch" parameterType="java.util.HashMap">
+        update cmp_journal
+        <set>
+            checkmatch = false ,
+            relevanceid = null
+        </set>
+        <where>
+            ytenant_id = #{ytenant_id} and
+            relevanceid in
+            <foreach item="item" index="index" collection="relevanceids" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="updateBankElectronicReceiptcheckmatch" parameterType="java.util.HashMap">
+        update cmp_bankelectronicreceipt
+        <set>
+            checkmatch = false ,
+            relevanceid = null
+        </set>
+        <where>
+            ytenant_id = #{ytenant_id} and
+            relevanceid in
+            <foreach item="item" index="index" collection="relevanceids" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="updateJournalSealFalse" parameterType="java.util.HashMap" >
+        update cmp_journal
+        <set>
+            sealflag = false
+        </set>
+        <where>
+            ytenant_id = #{ytenant_id} and
+            checkno in
+            <foreach item="item" index="index" collection="checknos" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="updateJournalSealTrue" parameterType="java.util.HashMap" >
+        update cmp_journal
+        <set>
+            sealflag = true
+        </set>
+        <where>
+            ytenant_id = #{ytenant_id} and
+            checkno in
+            <foreach item="item" index="index" collection="checknos" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="updateBankreconciliationSealTrue" parameterType="java.util.HashMap">
+        update cmp_bankreconciliation
+        <set>
+           sealflag = true
+        </set>
+        <where>
+            ytenant_id = #{ytenant_id} and
+            checkno in
+            <foreach item="item" index="index" collection="checknos" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="updateBankreconciliationSealFalse" parameterType="java.util.HashMap">
+        update cmp_bankreconciliation
+        <set>
+            sealflag = false
+        </set>
+        <where>
+            ytenant_id = #{ytenant_id} and
+            checkno in
+            <foreach item="item" index="index" collection="checknos" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="updateOtherBankreconciliationSealTrue" parameterType="java.util.HashMap">
+        update cmp_bankreconciliation
+        <set>
+            sealflag = true
+        </set>
+        <where>
+            ytenant_id = #{ytenant_id} and
+            other_checkno in
+            <foreach item="item" index="index" collection="checknos" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="updateOtherBankreconciliationSealFalse" parameterType="java.util.HashMap">
+        update cmp_bankreconciliation
+        <set>
+            sealflag = false
+        </set>
+        <where>
+            ytenant_id = #{ytenant_id} and
+            other_checkno in
+            <foreach item="item" index="index" collection="checknos" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+
+</mapper>

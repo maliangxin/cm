@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yonyoucloud.fi.cmp.mapper.JournalRepairMapper">
+
+    <update id="updateInitDataAccount" parameterType="java.util.HashMap">
+        update cmp_initdata set
+            cobookoribalance = cobookoribalance + #{changeOriSum},
+            cobooklocalbalance = cobooklocalbalance + #{changeNatSum}
+        where id = #{initDataId} and ytenant_id = #{ytenant_id}
+    </update>
+
+    <update id="modifyInitBalanceById" parameterType="java.util.HashMap">
+        update cmp_initdata set
+                                cobookoribalance =  #{cobookoribalance},
+                                cobooklocalbalance = #{cobookoribalance}
+        where id = #{initDataId} and ytenant_id = #{ytenant_id}
+    </update>
+
+    <update id="deleteJournal" parameterType="java.util.HashMap">
+        update cmp_journal set ytenant_id = #{newytenant_id},tenant_id = #{dateString}
+        where id = #{journalId} and ytenant_id = #{ytenant_id}
+    </update>
+
+
+</mapper>

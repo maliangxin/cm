@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yonyoucloud.fi.cmp.voucher">
+
+    <update id="updateVoucherStatus">
+        update ${tableName} set
+        <trim suffixOverrides=",">
+            pubts = pubts,
+            <if test="voucherstatus != null" >
+                voucherstatus = #{voucherstatus},
+            </if>
+            <if test='tableName == "cmp_paybill" and voucherNo != null' >
+                voucherNo = #{voucherNo},
+            </if>
+            <if test='tableName == "cm_transfer_account" and voucherNo != null' >
+                voucherNo = #{voucherNo},
+            </if>
+            <if test='tableName == "cmp_receivebill" and voucherNo != null' >
+                voucherNo = #{voucherNo},
+            </if>
+            <if test='tableName == "cmp_currencyexchange" and voucherNo != null' >
+                voucherNo = #{voucherNo},
+            </if>
+            <if test='tableName == "cmp_exchangegainloss" and voucherNo != null' >
+                voucherNo = #{voucherNo},
+            </if>
+            <if test='tableName == "cmp_salarypay" and voucherNo != null' >
+                voucherNo = #{voucherNo},
+            </if>
+            <if test='tableName == "cmp_marginaccount" and voucherNo != null' >
+                voucherNo = #{voucherNo},
+            </if>
+            <if test='tableName == "cmp_foreignpayment" and voucherNo != null' >
+                voucherNo = #{voucherNo},
+            </if>
+            <if test="voucherPeriod != null" >
+                voucherPeriod = #{voucherPeriod},
+            </if>
+            <if test="voucherId != null" >
+                voucherId = #{voucherId},
+            </if>
+            <if test="fiEventDataVersion != null" >
+                fi_event_data_version = #{fiEventDataVersion},
+            </if>
+            <if test="voucherVersion != null" >
+                voucher_version = #{voucherVersion},
+            </if>
+        </trim>
+        where id = #{id}
+        <if test="tenantId != null" >
+            and ytenant_id = #{tenantId}
+        </if>
+
+    </update>
+
+
+    <update id="updateFundVoucherStatus">
+        update ${tableName} set
+        <trim suffixOverrides=",">
+            pubts = pubts,
+            <if test="voucherstatus != null" >
+                voucher_status = #{voucherstatus},
+            </if>
+            <if test='tableName == "stwb_settleapply_fund_assistant" and voucherNo != null' >
+                voucher_no = #{voucherNo},
+            </if>
+            <if test='tableName == "stwb_settleapply_fund_assistant" and postingMsg != null' >
+                posting_msg = #{postingMsg},
+            </if>
+            <if test="voucherPeriod != null" >
+                voucher_period = #{voucherPeriod},
+            </if>
+            <if test="voucherId != null" >
+                voucher_id = #{voucherId},
+            </if>
+            <if test="fiEventDataVersion != null" >
+                fi_event_data_version = #{fiEventDataVersion},
+            </if>
+            <if test="voucherVersion != null" >
+                voucher_version = #{voucherVersion},
+            </if>
+        </trim>
+        where id = #{id}
+        <if test="tenantId != null" >
+            and ytenant_id = #{tenantId}
+        </if>
+
+    </update>
+
+    <update id="updateVoucherStatusBySrcbillid">
+        update ${tableName}
+        set pubts = pubts,
+        voucherstatus=#{voucherStatus},
+        voucherNo = #{voucherNo},
+        voucherPeriod = #{voucherPeriod}
+        where ytenant_id = #{ytenantId} and srcbillid=#{id}
+    </update>
+
+    <update id="updateVoucherStatusReal">
+        update ${tableName}
+        set voucherstatus=#{voucherstatus}
+        where id=#{id}
+    </update>
+
+    <!-- 此接口用于数据恢复 -->
+    <update id="updateVoucherNo">
+        update ${tableName} set
+        <trim suffixOverrides=",">
+            pubts = pubts,
+            <if test="voucherstatus != null" >
+                voucherstatus = #{voucherstatus},
+            </if>
+            voucherNo = #{voucherNo},
+            <if test="voucherPeriod != null" >
+                voucherPeriod = #{voucherPeriod},
+            </if>
+            <if test="voucherId != null" >
+                voucherId = #{voucherId},
+            </if>
+            <if test="fiEventDataVersion != null" >
+                fi_event_data_version = #{fiEventDataVersion},
+            </if>
+            <if test="voucherVersion != null" >
+                voucher_version = #{voucherVersion},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <!-- 此接口用于数据恢复 -->
+    <update id="updateVoucherId">
+        update ${tableName} set
+        <trim suffixOverrides=",">
+            pubts = pubts,
+            <if test="voucherId != null" >
+                voucherId = #{voucherId},
+            </if>
+            <if test="voucherPeriod != null" >
+                voucherPeriod = #{voucherPeriod},
+            </if>
+            <if test="fiEventDataVersion != null" >
+                fi_event_data_version = #{fiEventDataVersion},
+            </if>
+            <if test="voucherVersion != null" >
+                voucher_version = #{voucherVersion},
+            </if>
+            <if test="settleSuccessTime != null" >
+                settle_success_time = #{settleSuccessTime},
+            </if>
+        </trim>
+        where id = #{id}
+
+    </update>
+
+    <update id="updateVoucherNoOfJournal">
+        update cmp_journal set
+        <trim suffixOverrides=",">
+            pubts = pubts,
+            <if test="voucherNo != null">
+                voucherNo = #{voucherNo},
+            </if>
+            <if test="voucherPeriod != null" >
+                voucherPeriod = #{voucherPeriod},
+            </if>
+        </trim>
+        where  srcbillitemid = #{id}
+        <if test="yTenantId != null">
+            and ytenant_id = #{yTenantId}
+        </if>
+    </update>
+
+</mapper>

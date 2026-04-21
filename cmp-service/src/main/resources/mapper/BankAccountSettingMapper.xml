@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yonyoucloud.fi.cmp.mapper.BankAccountSettingMapper">
+    <select id="queryBankAccountSettingOpenFlag" parameterType="com.yonyoucloud.fi.cmp.common.CommonQueryData" resultType="com.yonyou.yonbip.ctm.json.CtmJSONObject">
+        select openflag from cmp_bankaccountsetting
+        where
+        ytenant_id = #{ytenantId}
+        and id = #{id}
+    </select>
+</mapper>

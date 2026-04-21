@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀)
+ -->
+<mapper namespace="com.yonyoucloud.fi.cmp.fcdsusesetting.mapper.FcdsusesettingMapper">
+
+    <delete id="deleteSysMainData" parameterType="java.util.Map">
+        delete from cmp_fc_datasource_use_setting where code in ('system0101','system0201','system0202','system0301') and is_preset=1 and ytenant_id = #{ytenantId}
+    </delete>
+    <delete id="deleteSysSubData" parameterType="java.util.Map">
+        delete from cmp_fc_datasource_use_setting_b where mainid in (select id from cmp_fc_datasource_use_setting where code in ('system0101','system0201','system0202','system0301') and is_preset=1 and ytenant_id = #{ytenantId})
+    </delete>
+    <select id="queryInitData" resultType="java.lang.Long" parameterType="java.util.Map">
+        select count(1) from cmp_fc_datasource_use_setting where code in ('system0101','system0201','system0202','system0301') and is_preset=1 and ytenant_id = #{ytenantId}
+    </select>
+
+    <!-- cmp_businessScenario 1 银行流水 2 认领单 -->
+    <insert id="initFcMainData" parameterType="java.util.Map">
+        INSERT INTO `cmp_fc_datasource_use_setting` (id,`action`, `code`, `dc_flag`, `enable`, `is_preset`, `name`,`name2`,`name3`,`name4`,`name5`,`name6`,`business_scenario`, `org`, `pubts`, `tenant_id`, `ytenant_id`)
+        values 
+        (#{system0101},1,'system0101', NULL, '1', 1, '银行流水关联收付单据设置', 'Bank flow associated collection/payment document setting','銀行流水關聯收付單據設置',NULL,NULL,NULL, '1,2', '666666', #{pubts}, #{tenantId}, #{ytenantId}),
+        (#{system0201},2,'system0201', NULL, '1', 1, '银行流水生成收付单据设置', 'Bank flow generation collection/payment document setting','銀行流水生成收付單據設置',NULL,NULL,NULL,'1', '666666', #{pubts}, #{tenantId}, #{ytenantId}),
+        (#{system0202},2,'system0202', NULL, '1', 1, '认领单生成收付单据设置', 'Collection/Payment Doc Generation Setting of Claim Doc','認領單生成收付單據設置',NULL,NULL,NULL, '2', '666666', #{pubts}, #{tenantId}, #{ytenantId}),
+        (#{system0301},3,'system0301', NULL, '1', 1, '业务凭据匹配关联设置', 'Business Credential Match Association Settings','業務憑據匹配關聯設置',NULL,NULL,NULL, '1,2', '666666', #{pubts}, #{tenantId}, #{ytenantId});
+    </insert>
+    <!-- aa_cmp_dc_flag 1 支出 2 收入 -->
+    <insert id="initFcSubDataSystem0101" parameterType="java.util.Map">
+        INSERT INTO `cmp_fc_datasource_use_setting_b` (id,`biz_object`, `biz_object_code`, `biz_object_name`, `cdp_id`, `dc_flag`, `disablets`, `domain`,`domain_name`, `enable`, `enablets`, `mainid`, `object`, `pubts`, `trade_type`,`tenant_id`,  `ytenant_id`)
+        values
+        (#{system01012},'0935ea77-311b-46bd-9c4e-6669f671d0f3','stwb.stwb_settlebench','结算单', #{system02}, '1,2', NULL, 'yonbip-fi-ctmstwb','结算平台', '1', NULL, #{system0101}, '资金结算明细',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system01013},'dfa1c2b0-94ea-450b-8ad6-3588bb90c1a3','yonbip-fi-ctmtlm.tlm_financein','融入登记单', NULL, '2', NULL, 'yonbip-fi-ctmtlm','融资管理', '1', NULL, #{system0101}, '融入登记',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system01014},'d756734d-c2cc-4b25-aa90-4017101ed0cc','yonbip-fi-ctmtlm.tlm_payinterest','融资付息单', NULL, '1', NULL, 'yonbip-fi-ctmtlm','融资管理', '1', NULL, #{system0101}, '融资付息',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system01015},'c1f575df-d01f-4fd0-8eb4-82b1c0167669','yonbip-fi-ctmtlm.tlm_financepayfee','融资付费单', NULL, '1', NULL, 'yonbip-fi-ctmtlm','融资管理', '1', NULL, #{system0101}, '融资付费',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system01016},'23b901c0-f04c-46cf-9c7f-a32e8621d87e','yonbip-fi-ctmtlm.tlm_repayment','融资还本单', NULL, '1', NULL, 'yonbip-fi-ctmtlm','融资管理', '1', NULL, #{system0101}, '融资还本',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system01017},'f1415018-e168-4e5a-91bc-0ce292d90288','yonbip-fi-ctmtlm.tlm_interestcollection','投资收息单', NULL, '2', NULL, 'yonbip-fi-ctmtlm','投资管理', '1', NULL, #{system0101}, '投资收息',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system01018},'1d69c495-008f-4f46-9379-5e42ff0311f0','yonbip-fi-ctmtlm.tlm_investredem','投资赎回单', NULL, '2', NULL, 'yonbip-fi-ctmtlm','投资管理', '1', NULL, #{system0101}, '投资赎回',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system01019},'77c1dba3-a36f-4c59-8f83-2b2f3293acce','yonbip-fi-ctmtlm.tlm_investprofitsharing','投资分红单', NULL, '2', NULL, 'yonbip-fi-ctmtlm','投资管理', '1', NULL, #{system0101}, '投资分红',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system010110},'9263d179-0cbc-43b1-b559-7235207192b1','yonbip-fi-ctmtlm.tlm_purchaseregister','申购登记单', NULL, '1', NULL, 'yonbip-fi-ctmtlm','投资管理', '1', NULL, #{system0101}, '申购登记',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system010111},'71a95d10-b94b-4228-8983-5842c1bbd25d','yonbip-fi-ctmtlm.tlm_investpayment','投资付费单', NULL, '1', NULL, 'yonbip-fi-ctmtlm','投资管理', '1', NULL, #{system0101}, '投资付费',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system010112},'4878e75f-01cd-4fd5-a85a-68bb48ffa602','ctm-cmp.cm_transfer_account','转账工作台', NULL, '1,2', NULL, 'yonbip-fi-ctmcmp','现金管理', '1', NULL, #{system0101}, '银行转账单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system010113},'a493741a-5b60-41d6-b488-d8566de41101','ctm-cmp.cmp_currencyexchange','外币兑换工作台', NULL, '1,2', NULL, 'yonbip-fi-ctmcmp','现金管理', '1', NULL, #{system0101}, '外币兑换单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system010114},'a61a1baf-ee86-4f42-8874-f952c970a23f','ctm-cmp.cmp_fundcollection','资金收款单', NULL, '2', NULL, 'yonbip-fi-ctmcmp','现金管理', '1', NULL, #{system0101}, '资金收款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system010115},'c2884298-6f43-4523-ac97-831c811e82f2','ctm-cmp.cmp_fundpayment','资金付款单', NULL, '1', NULL, 'yonbip-fi-ctmcmp','现金管理', '1', NULL, #{system0101}, '资金付款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system010116},'9b3b1f90-0aca-44bb-9d05-ae59684f51bd','yonbip-fi-ctmtlm.tlm_tradedelivery','交易交割登记单', NULL, '1,2', NULL, 'yonbip-fi-ctmtlm','衍生品管理', '1', NULL, #{system0101}, '交易交割单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system010117},'b4630e01-ab0b-4d24-95e9-187ed86a302e','yonbip-fi-ctmtlm.tlm_derivativesclose','交易平仓登记单', NULL, '1,2', NULL, 'yonbip-fi-ctmtlm','衍生品管理', '1', NULL, #{system0101}, '交易平仓单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system010118},'fe32dae1-e025-4c3d-a3c5-c5eb526ab73f','yonbip-fi-ctmtlm.tlm_traderolloverregister','交易展期登记单', NULL, '1,2', NULL, 'yonbip-fi-ctmtlm','衍生品管理', '1', NULL, #{system0101}, '交易展期登记单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system010119},'f6c9735f-3a55-430f-bfda-1772008e4f3d','yonbip-fi-ctmtlm.tlm_addbond','交易保证金登记单', NULL, '1', NULL, 'yonbip-fi-ctmtlm','衍生品管理', '1', NULL, #{system0101}, '交易保证金登记单',  #{pubts}, NULL, #{tenantId}, #{ytenantId});
+    </insert>
+    <insert id="initFcSubDataSystem0201" parameterType="java.util.Map">
+        INSERT INTO `cmp_fc_datasource_use_setting_b` (id,`biz_object`, `biz_object_code`, `biz_object_name`, `cdp_id`, `dc_flag`, `disablets`, `domain`, `domain_name`,`enable`, `enablets`, `mainid`, `object`, `pubts`, `trade_type`,`tenant_id`,  `ytenant_id`)
+        values
+        (#{system02011},'f3606cf8-d08e-409a-89cd-3fd805a5b236','znbzbx.znbzbx_returnbill','还款单', NULL, '2', NULL, 'yonbip-fi-expsrbsm','报账业务', '1', NULL,  #{system0201}, '还款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system02012},'44fe70af-7231-4b74-a522-101a4d8ab6d3','znbzbx.znbzbx_refundbill','退款单', NULL, '2', NULL, 'yonbip-fi-expsrbsm','报账业务', '1', NULL,  #{system0201}, '退款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system02013},'811150c4-2598-424d-a9f8-a1e47b3af37a','ctm-stct.stct_innerInterestHandle','内部账户结息', NULL, '1,2', NULL, 'yonbip-fi-ctmstct','结算中心', '1', NULL,  #{system0201}, '内部账户结算单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system02014},'7f1a69c7-a9fb-4a04-af38-067e80cf7c63','ctm-stct.stct_agentpayment','代理付款单', NULL, '1', NULL, 'yonbip-fi-ctmstct','结算中心', '1', NULL,  #{system0201}, '代理付款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system02015},'e7699802-ab2c-45f7-a68f-0efa885ffd7e','ctm-stct.stct_agentCollection','代理收款单', NULL, '2', NULL, 'yonbip-fi-ctmstct','结算中心', '1', NULL,  #{system0201}, '代理收款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system02016},'62a2bd5b-d3e2-40d9-80ff-58f9d719ed87','fdtr_collectReceBill','归集收款单', NULL, '2', NULL, 'yonbip-fi-ctmfdtr','资金调度', '1', NULL,  #{system0201}, '归集收款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system02017},'1ca48547-ca05-4ecb-9824-4bbd4a080ce7','fdtr_allocaterecebill','下拨收款单', NULL, '2', NULL, 'yonbip-fi-ctmfdtr','资金调度', '1', NULL,   #{system0201}, '下拨收款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system02018},'2e1098b0-0c29-4c4c-95f7-9151f2411458','fdtr_collectPayBill','归集付款单', NULL, '1', NULL, 'yonbip-fi-ctmfdtr','资金调度', '1', NULL,  #{system0201}, '归集付款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system02019},'42c9df1c-5a08-41cf-8954-3f6903736a78','fdtr_allocatepaybill','下拨付款单', NULL, '1', NULL, 'yonbip-fi-ctmfdtr','资金调度', '1', NULL,  #{system0201}, '下拨付款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020110},'dfa1c2b0-94ea-450b-8ad6-3588bb90c1a3','yonbip-fi-ctmtlm.tlm_financein','融入登记单', NULL, '2', NULL, 'yonbip-fi-ctmfdtr','融资管理', '1', NULL,  #{system0201}, '融入登记',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020111},'d756734d-c2cc-4b25-aa90-4017101ed0cc','yonbip-fi-ctmtlm.tlm_payinterest','融资付息单', NULL, '1', NULL, 'yonbip-fi-ctmfdtr','融资管理', '1', NULL,  #{system0201}, '融资付息',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020112},'c1f575df-d01f-4fd0-8eb4-82b1c0167669','yonbip-fi-ctmtlm.tlm_financepayfee','融资付费单', NULL, '1', NULL, 'yonbip-fi-ctmfdtr','融资管理', '1', NULL,  #{system0201}, '融资付费',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020113},'23b901c0-f04c-46cf-9c7f-a32e8621d87e','yonbip-fi-ctmtlm.tlm_repayment','融资还本单', NULL, '1', NULL, 'yonbip-fi-ctmfdtr','融资管理', '1', NULL, #{system0201}, '融资还本',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020114},'b32ac923-ad8a-4fa7-ab44-211081455cbe','drft.drft_discount','贴现办理', NULL, '2', NULL, 'yonbip-fi-ctmdrft','商业票据', '1', NULL, #{system0201}, '贴现办理单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020115},'495fc7a1-d077-43d0-9803-883834e742c4','drft.drft_consignbank','银行托收', NULL, '2', NULL, 'yonbip-fi-ctmdrft','商业票据', '1', NULL,  #{system0201}, '银行托收单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020116},'8d9b286a-73b5-4e4d-b94c-45343bf97b59','drft.drft_expirecash','到期兑付', NULL, '1', NULL, 'yonbip-fi-ctmdrft','商业票据', '1', NULL,  #{system0201}, '到期兑付单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020117},'f1415018-e168-4e5a-91bc-0ce292d90288','yonbip-fi-ctmtlm.tlm_interestcollection','投资收息单', NULL, '2', NULL, 'yonbip-fi-ctmtlm','投资管理', '1', NULL,  #{system0201}, '投资收息',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020118},'1d69c495-008f-4f46-9379-5e42ff0311f0','yonbip-fi-ctmtlm.tlm_investredem','投资赎回单', NULL, '2', NULL, 'yonbip-fi-ctmtlm','投资管理', '1', NULL,  #{system0201}, '投资赎回',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020119},'77c1dba3-a36f-4c59-8f83-2b2f3293acce','yonbip-fi-ctmtlm.tlm_investprofitsharing','投资分红单', NULL, '2', NULL, 'yonbip-fi-ctmtlm','投资管理', '1', NULL,  #{system0201}, '投资分红',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020120},'9263d179-0cbc-43b1-b559-7235207192b1','yonbip-fi-ctmtlm.tlm_purchaseregister','申购登记单', NULL, '1', NULL, 'yonbip-fi-ctmtlm','投资管理', '1', NULL,  #{system0201}, '申购登记',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020121},'71a95d10-b94b-4228-8983-5842c1bbd25d','yonbip-fi-ctmtlm.tlm_investpayment','投资付费单', NULL, '1', NULL, 'yonbip-fi-ctmtlm','投资管理', '1', NULL,  #{system0201}, '投资付费',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020122},'4878e75f-01cd-4fd5-a85a-68bb48ffa602','ctm-cmp.cm_transfer_account','转账工作台', NULL, '1,2', NULL, 'yonbip-fi-ctmcmp','现金管理', '1', NULL,  #{system0201}, '银行转账单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020123},'a493741a-5b60-41d6-b488-d8566de41101','ctm-cmp.cmp_currencyexchange','外币兑换工作台', NULL, '1,2', NULL, 'yonbip-fi-ctmcmp','现金管理', '1', NULL,  #{system0201}, '外币兑换单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020124},'a61a1baf-ee86-4f42-8874-f952c970a23f','ctm-cmp.cmp_fundcollection','资金收款单', NULL, '2', NULL, 'yonbip-fi-ctmcmp','现金管理', '1', NULL,  #{system0201}, '资金收款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020125},'c2884298-6f43-4523-ac97-831c811e82f2','ctm-cmp.cmp_fundpayment','资金付款单', NULL, '1', NULL, 'yonbip-fi-ctmcmp','现金管理', '1', NULL,  #{system0201}, '资金付款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020126},'c6fdb564-7d12-4961-a4f2-504abd35ab94','yonbip-fi-ctmlcm.lcm_payregister','到单付款', NULL, '1', NULL, 'yonbip-fi-ctmlcm','信用证管理', '1', NULL,  #{system0201}, '到单付款',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020127},'82784633-896c-47c1-9f1e-94670c56381b','yonbip-fi-ctmlcm.lcm_payforissue','信用证费用', NULL, '1', NULL, 'yonbip-fi-ctmlcm','信用证管理', '1', NULL,  #{system0201}, '信用证费用',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020128},'5bca0468-b541-4fc6-8d13-66d85e2d7d0f','yonbip-fi-ctmlcm.lcm_receiptreg','交单收款', NULL, '2', NULL, 'yonbip-fi-ctmlcm','信用证管理', '1', NULL,  #{system0201}, '交单收款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020129},'cdc3f331-81d3-4431-8352-b408d3f9ef69','yonbip-fi-ctmlgm.lgm_guaranteefee','保函费用单', NULL, '1', NULL,'yonbip-fi-ctmlgm', '保函管理', '1', NULL,  #{system0201}, '保函费用',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020131},'4063ed0a-13b8-4f30-a114-f9a93492afff','payment_refund_voucher','付款退款单', NULL, '2', NULL,'yonbip-hy-bajzemc', '建筑云', '1', NULL,  #{system0201}, '建筑付款退款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020132},'1238efad-22a0-43ff-96a2-45c2afaa7148','receipt_vouche','收款单', NULL, '2', NULL, 'yonbip-hy-bajzemc','建筑云', '1', NULL,  #{system0201}, '建筑云收款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020133},'3d4099d3-5022-48d7-9e30-ce2565f2e16a','ba_guarantee_recover','对甲保证金收回', NULL, '2', NULL, 'yonbip-hy-bajzemc','建筑云', '1', NULL,  #{system0201}, '对甲保证金收回单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020134},'4b3621b2-fbcd-4344-b11e-0c0bbd0ee6ec','ba_guarantee_collect','对乙保证金收取', NULL, '2', NULL, 'yonbip-hy-bajzemc','建筑云', '1', NULL,  #{system0201}, '对乙保证金收取单',  #{pubts}, NULL, #{tenantId}, #{ytenantId});
+    </insert>
+    <insert id="initFcSubDataSystem0202" parameterType="java.util.Map">
+    INSERT INTO `cmp_fc_datasource_use_setting_b` (id,`biz_object`, `biz_object_code`, `biz_object_name`, `cdp_id`, `dc_flag`, `disablets`, `domain`, `domain_name`,`enable`, `enablets`, `mainid`, `object`, `pubts`, `trade_type`,`tenant_id`,  `ytenant_id`)
+    values
+        (#{system02021},'f3606cf8-d08e-409a-89cd-3fd805a5b236','znbzbx.znbzbx_returnbill','还款单', NULL, '2', NULL,  'yonbip-fi-expsrbsm','报账业务', '1', NULL,  #{system0202}, '还款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system02022},'44fe70af-7231-4b74-a522-101a4d8ab6d3','znbzbx.znbzbx_refundbill','退款单', NULL, '2', NULL,  'yonbip-fi-expsrbsm','报账业务', '1', NULL,  #{system0202}, '退款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system02023},'811150c4-2598-424d-a9f8-a1e47b3af37a','ctm-stct.stct_innerInterestHandle','内部账户结息', NULL, '1,2', NULL, 'yonbip-fi-ctmstct','结算中心', '1', NULL,  #{system0202}, '内部账户结算单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system02024},'7f1a69c7-a9fb-4a04-af38-067e80cf7c63','ctm-stct.stct_agentpayment','代理付款单', NULL, '1', NULL, 'yonbip-fi-ctmstct','结算中心', '1', NULL,  #{system0202}, '代理付款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system02025},'e7699802-ab2c-45f7-a68f-0efa885ffd7e','ctm-stct.stct_agentCollection','代理收款单', NULL, '2', NULL, 'yonbip-fi-ctmstct','结算中心', '1', NULL,  #{system0202}, '代理收款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system02026},'62a2bd5b-d3e2-40d9-80ff-58f9d719ed87','fdtr_collectReceBill','归集收款单', NULL, '2', NULL, 'yonbip-fi-ctmfdtr','资金调度', '1', NULL,  #{system0202}, '归集收款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system02027},'1ca48547-ca05-4ecb-9824-4bbd4a080ce7','fdtr_allocaterecebill','下拨收款单', NULL, '2', NULL, 'yonbip-fi-ctmfdtr','资金调度', '1', NULL,   #{system0202}, '下拨收款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system02028},'2e1098b0-0c29-4c4c-95f7-9151f2411458','fdtr_collectPayBill','归集付款单', NULL, '1', NULL, 'yonbip-fi-ctmfdtr','资金调度', '1', NULL,  #{system0202}, '归集付款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system02029},'42c9df1c-5a08-41cf-8954-3f6903736a78','fdtr_allocatepaybill','下拨付款单', NULL, '1', NULL, 'yonbip-fi-ctmfdtr','资金调度', '1', NULL,  #{system0202}, '下拨付款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020210},'dfa1c2b0-94ea-450b-8ad6-3588bb90c1a3','yonbip-fi-ctmtlm.tlm_financein','融入登记单', NULL, '2', NULL,'yonbip-fi-ctmfdtr', '融资管理', '1', NULL,  #{system0202}, '融入登记',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020211},'d756734d-c2cc-4b25-aa90-4017101ed0cc','yonbip-fi-ctmtlm.tlm_payinterest','融资付息单', NULL, '1', NULL, 'yonbip-fi-ctmfdtr','融资管理', '1', NULL,  #{system0202}, '融资付息',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020212},'c1f575df-d01f-4fd0-8eb4-82b1c0167669','yonbip-fi-ctmtlm.tlm_financepayfee','融资付费单', NULL, '1', NULL, 'yonbip-fi-ctmfdtr','融资管理', '1', NULL,  #{system0202}, '融资付费',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020213},'23b901c0-f04c-46cf-9c7f-a32e8621d87e','yonbip-fi-ctmtlm.tlm_repayment','融资还本单', NULL, '1', NULL, 'yonbip-fi-ctmfdtr','融资管理', '1', NULL, #{system0202}, '融资还本',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020214},'b32ac923-ad8a-4fa7-ab44-211081455cbe','drft.drft_discount','贴现办理', NULL, '2', NULL, 'yonbip-fi-ctmdrft','商业票据', '1', NULL, #{system0202}, '贴现办理单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020215},'495fc7a1-d077-43d0-9803-883834e742c4','drft.drft_consignbank','银行托收', NULL, '2', NULL, 'yonbip-fi-ctmdrft','商业票据', '1', NULL,  #{system0202}, '银行托收单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020216},'8d9b286a-73b5-4e4d-b94c-45343bf97b59','drft.drft_expirecash','到期兑付', NULL, '1', NULL,'yonbip-fi-ctmdrft', '商业票据', '1', NULL,  #{system0202}, '到期兑付单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020217},'f1415018-e168-4e5a-91bc-0ce292d90288','yonbip-fi-ctmtlm.tlm_interestcollection','投资收息单', NULL, '2', NULL, 'yonbip-fi-ctmtlm','投资管理', '1', NULL,  #{system0202}, '投资收息',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020218},'1d69c495-008f-4f46-9379-5e42ff0311f0','yonbip-fi-ctmtlm.tlm_investredem','投资赎回单', NULL, '2', NULL, 'yonbip-fi-ctmtlm','投资管理', '1', NULL,  #{system0202}, '投资赎回',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020219},'77c1dba3-a36f-4c59-8f83-2b2f3293acce','yonbip-fi-ctmtlm.tlm_investprofitsharing','投资分红单', NULL, '2', NULL,'yonbip-fi-ctmtlm', '投资管理', '1', NULL,  #{system0202}, '投资分红',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020220},'9263d179-0cbc-43b1-b559-7235207192b1','yonbip-fi-ctmtlm.tlm_purchaseregister','申购登记单', NULL, '1', NULL, 'yonbip-fi-ctmtlm','投资管理', '1', NULL,  #{system0202}, '申购登记',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020221},'71a95d10-b94b-4228-8983-5842c1bbd25d','yonbip-fi-ctmtlm.tlm_investpayment','投资付费单', NULL, '1', NULL, 'yonbip-fi-ctmtlm','投资管理', '1', NULL,  #{system0202}, '投资付费',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020222},'4878e75f-01cd-4fd5-a85a-68bb48ffa602','ctm-cmp.cm_transfer_account','转账工作台', NULL, '1,2', NULL, 'yonbip-fi-ctmcmp','现金管理', '1', NULL,  #{system0202}, '银行转账单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020223},'a493741a-5b60-41d6-b488-d8566de41101','ctm-cmp.cmp_currencyexchange','外币兑换工作台', NULL, '1,2', NULL, 'yonbip-fi-ctmcmp','现金管理', '1', NULL,  #{system0202}, '外币兑换单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020224},'a61a1baf-ee86-4f42-8874-f952c970a23f','ctm-cmp.cmp_fundcollection','资金收款单', NULL, '2', NULL, 'yonbip-fi-ctmcmp','现金管理', '1', NULL,  #{system0202}, '资金收款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020225},'c2884298-6f43-4523-ac97-831c811e82f2','ctm-cmp.cmp_fundpayment','资金付款单', NULL, '1', NULL, 'yonbip-fi-ctmcmp','现金管理', '1', NULL,  #{system0202}, '资金付款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020226},'c6fdb564-7d12-4961-a4f2-504abd35ab94','yonbip-fi-ctmlcm.lcm_payregister','到单付款', NULL, '1', NULL,'yonbip-fi-ctmlcm', '信用证管理', '1', NULL,  #{system0202}, '到单付款',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020227},'82784633-896c-47c1-9f1e-94670c56381b','yonbip-fi-ctmlcm.lcm_payforissue','信用证费用', NULL, '1', NULL,'yonbip-fi-ctmlcm', '信用证管理', '1', NULL,  #{system0202}, '信用证费用',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020228},'5bca0468-b541-4fc6-8d13-66d85e2d7d0f','yonbip-fi-ctmlcm.lcm_receiptreg','交单收款', NULL, '2', NULL, 'yonbip-fi-ctmlcm','信用证管理', '1', NULL,  #{system0202}, '交单收款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020229},'cdc3f331-81d3-4431-8352-b408d3f9ef69','yonbip-fi-ctmlgm.lgm_guaranteefee','保函费用单', NULL, '1', NULL, 'yonbip-fi-ctmlgm','保函管理', '1', NULL,  #{system0202}, '保函费用',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020230},'c086adf3-d68a-403c-8c53-63b225a7d87a','marketingbill.payment_voucher_detail_receipt','来款记录', NULL, '2', NULL, 'yonbip-mkt-mkc2b','营销中心', '1', NULL,  #{system0202}, '来款记录',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020231},'4063ed0a-13b8-4f30-a114-f9a93492afff','payment_refund_voucher','付款退款单', NULL, '2', NULL, 'yonbip-hy-bajzemc','建筑云', '1', NULL,  #{system0202}, '建筑付款退款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020232},'1238efad-22a0-43ff-96a2-45c2afaa7148','receipt_vouche','收款单', NULL, '2', NULL, 'yonbip-hy-bajzemc','建筑云', '1', NULL,  #{system0202}, '建筑云收款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020233},'3d4099d3-5022-48d7-9e30-ce2565f2e16a','ba_guarantee_recover','对甲保证金收回', NULL, '2', NULL,'yonbip-hy-bajzemc', '建筑云', '1', NULL,  #{system0202}, '对甲保证金收回单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020234},'4b3621b2-fbcd-4344-b11e-0c0bbd0ee6ec','ba_guarantee_collect','对乙保证金收取', NULL, '2', NULL,'yonbip-hy-bajzemc', '建筑云', '1', NULL,  #{system0202}, '对乙保证金收取单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020235},'e9c36855-30e0-4d2b-a38e-441b985193e7','apRefund','付款退款单', NULL, '2', NULL,'yonbip-fi-earapbill', '应付管理', '1', NULL,  #{system0202}, '应付付款单退款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020236},'59e99c75-4e25-44e1-aa73-dcb60d047533','yonyoufi.arap_refundbill_init','收款单', NULL, '2', NULL, 'yonbip-fi-earapbill','应付管理', '1', NULL, #{system0202}, '应收收款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId}),
+        (#{system020237},'548e9989-20b1-473c-ba02-9284b575a695','payment','付款单', NULL, '1', NULL, 'yonbip-fi-earapbill','应付管理', '1', NULL, #{system0202}, '应付付款单',  #{pubts}, NULL, #{tenantId}, #{ytenantId});
+    </insert>
+    <insert id="initFcSubDataSystem0301" parameterType="java.util.Map">
+        INSERT INTO `cmp_fc_datasource_use_setting_b` (id,`biz_object`, `biz_object_code`, `biz_object_name`, `cdp_id`, `dc_flag`, `disablets`, `domain`, `domain_name`,`enable`, `enablets`, `mainid`, `object`, `pubts`, `trade_type`,`tenant_id`,  `ytenant_id`)
+        values
+        (#{system03011},'c2dcee18-1051-4c65-99cb-8d69d1ef7a8d','yonbip-gscm-drill.liruofan_drill_saleorder_card','销售订单', #{system05}, '2', NULL, 'yonbip-gscm-drill','供应链云', '1', NULL, #{system0301}, '销售订单',  #{pubts}, NULL, #{tenantId}, #{ytenantId});
+    </insert>
+</mapper>

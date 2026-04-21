@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀)
+ -->
+<mapper namespace="com.yonyoucloud.fi.cmp.bankreconciliation.rule.BankReconciliationMapper">
+
+    <update id="updateBankReconciliation" parameterType="com.yonyoucloud.fi.cmp.bankreconciliation.BankReconciliation">
+        UPDATE cmp_bankreconciliation
+        <set>
+            checkflag = #{checkflag}
+        </set>
+        <where>
+            id = #{id} and checkflag = false
+        </where>
+    </update>
+
+    <select id="queryBankReconciliationUseInfo" parameterType = "com.yonyoucloud.fi.cmp.common.CommonQueryData" resultType="com.yonyou.yonbip.ctm.json.CtmJSONObject">
+        SELECT count(1) as count ,max(tran_amt) as maxamt from cmp_bankreconciliation
+        where
+        ytenant_id = #{ytenantId}
+        and currency = #{currency}
+        and accentity = #{accentity}
+        and bankaccount = #{bankaccount}
+        <if test = "remarkMatchType == '1'.toString() ">
+            and remark != #{remark}
+        </if>
+        and tran_date BETWEEN #{startDate} and #{endDate};
+    </select>
+    <select id="queryBankReconciliationUseInfoWithRepeatCondition" parameterType = "com.yonyoucloud.fi.cmp.common.CommonQueryData" resultType="com.yonyou.yonbip.ctm.json.CtmJSONObject">
+        SELECT count(1) as count ,max(tran_amt) as maxamt from cmp_bankreconciliation
+        where
+        ytenant_id = #{ytenantId}
+        and (isrepeat in (0,3) or isrepeat is null)
+        and currency = #{currency}
+        and accentity = #{accentity}
+        and bankaccount = #{bankaccount}
+        <if test = "remarkMatchType == '1'.toString() ">
+            and remark != #{remark}
+        </if>
+        and tran_date BETWEEN #{startDate} and #{endDate};
+    </select>
+
+    <update id="batchUpdateFrozenstatus" parameterType="java.util.List">
+        <foreach collection="list" item="bankbill" index="index" open="" close="" separator=";">
+            UPDATE cmp_bankreconciliation
+            <set>
+                frozenstatus = #{bankbill.frozenstatus}
+            </set>
+            <where>
+                id = #{bankbill.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updateBankReconciliationReceiptassociation" parameterType="java.util.HashMap">
+        update cmp_bankreconciliation
+        <set>
+            receiptassociation = 0 ,
+        </set>
+        <where>
+            ytenant_id = #{ytenant_id} and
+            id in
+            <foreach item="item" index="index" collection="ids" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="updateBankReconciliationReceiptassociationNew" parameterType="java.util.HashMap">
+        update cmp_bankreconciliation
+        <set>
+            receiptassociation = 4 ,
+            concat_info_4 = #{concat_info_4}
+        </set>
+        <where>
+            ytenant_id = #{ytenant_id} and
+            id = #{id}
+        </where>
+    </update>
+
+    <update id="updateBankElectronicReceipAssociation" parameterType="java.util.HashMap">
+        update cmp_bankelectronicreceipt
+        <set>
+            receiptassociation = 0 ,
+        </set>
+        <where>
+            ytenant_id = #{ytenant_id} and
+            id in
+            <foreach item="item" index="index" collection="ids" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+
+
+    <update id="updateBankRecAutoassociation" parameterType="java.util.HashMap">
+        UPDATE cmp_bankreconciliation
+        <set>
+            autoassociation = 1,modify_time=#{modifyTime} ,modify_date=#{modifyDate},modifier=#{modifier} ,modifierId=#{modifierId}
+        </set>
+        <where>
+            ytenant_id = #{ytenant_id} and
+            id in
+            <foreach item="item" index="index" collection="ids" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+
+
+    <select id="queryDataToUpdate" resultType="java.util.HashMap">
+        SELECT id,bankaccount,tran_date,tran_time,tran_amt,dc_flag,bank_seq_no,to_acct_no,to_acct_name from cmp_bankreconciliation where concat_info is null limit 20000;
+    </select>
+
+    <update id="updateConcatInfo"  parameterType = "java.util.HashMap">
+        update cmp_bankreconciliation set concat_info = #{concat_info}
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+
+    <update id="updateVirtualentrytype"  parameterType = "java.util.HashMap">
+        update cmp_bankreconciliation set virtualentrytype = #{virtualentrytype},pubts=pubts
+        <where>
+            id = #{id} and (virtualentrytype != #{virtualentrytype} or virtualentrytype is null)
+        </where>
+    </update>
+
+
+
+    <select id="queryDetailDataToUpdate" resultType="java.util.HashMap">
+        SELECT id,enterprisebankaccount,trandate,trantime,tran_amt,dc_flag,bankseqno,to_acct_no,to_acct_name from cmp_bankdealdetail where concat_info is null limit 20000;
+    </select>
+
+    <update id="updateDetailConcatInfo"  parameterType="java.util.List">
+        update cmp_bankdealdetail set concat_info = #{concat_info}
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <update id="updateReceiptAssociationCondition" parameterType = "com.yonyoucloud.fi.cmp.common.CommonQueryData">
+        update cmp_bankreconciliation a
+        INNER JOIN cmp_bankelectronicreceipt b ON a.id = b.bankreconciliationid
+        set a.receiptassociation = 0
+        WHERE
+         a.ytenant_id = #{ytenantId}
+        AND b.ytenant_id = #{ytenantId}
+         and a.id in
+            <foreach item="item" index="index" collection="claimIds" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+    </update>
+
+
+
+</mapper>

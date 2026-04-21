@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀)
+ -->
+<mapper namespace="com.yonyoucloud.fi.cmp.bankReceipt.rule.BankReceiptMapper">
+
+    <update id="updtateBankReceiptData" parameterType = "com.yonyoucloud.fi.cmp.common.CommonQueryData">
+        update cmp_bankelectronicreceipt a
+        INNER JOIN cmp_bankreconciliation b ON a.enterprisebankaccount = b.bankaccount
+                                                  and a.bankseqno = b.bank_seq_no
+                                                  and a.tran_amt = b.tran_amt
+                                                  and a.dc_flag = b.dc_flag
+        set a.bankreconciliationid = b.id,
+        a.associationstatus = 0
+        WHERE
+        (a.associationstatus = 4 or a.associationstatus is null) and
+        a.enterprisebankaccount in
+        <foreach item="item" index="index" collection="enterpriseBankAccountList" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+        AND a.trandate BETWEEN #{startDate}
+        AND #{endDate}
+        AND a.ytenant_id = #{ytenantId}
+        AND b.ytenant_id = #{ytenantId}
+        <if test="claimIds!=null">
+            AND b.id in
+            <foreach item="item" index="index" collection="claimIds" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+    <update id="updtateBankReceiptDataWithRepeatCondition" parameterType = "com.yonyoucloud.fi.cmp.common.CommonQueryData">
+        update cmp_bankelectronicreceipt a
+        INNER JOIN cmp_bankreconciliation b ON a.enterprisebankaccount = b.bankaccount
+        and a.bankseqno = b.bank_seq_no
+        and a.tran_amt = b.tran_amt
+        and a.dc_flag = b.dc_flag
+        set a.bankreconciliationid = b.id,
+        a.associationstatus = 0
+        WHERE
+        (a.associationstatus = 4 or a.associationstatus is null) and
+        a.enterprisebankaccount in
+        <foreach item="item" index="index" collection="enterpriseBankAccountList" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+        AND a.trandate BETWEEN #{startDate}
+        AND #{endDate}
+        AND a.ytenant_id = #{ytenantId}
+        AND b.ytenant_id = #{ytenantId}
+        and (isrepeat in (0,3) or isrepeat is null)
+        <if test="claimIds!=null">
+            AND b.id in
+            <foreach item="item" index="index" collection="claimIds" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+</mapper>

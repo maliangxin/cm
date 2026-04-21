@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yonyoucloud.fi.cmp.mapper.CheckManageMapper">
+    <resultMap id="BaseResultMap" type="com.yonyoucloud.fi.cmp.vo.checkstock.CheckManageVO">
+        <id column="id" property="id"/>
+        <result column="bill_date" property="billDate" />
+        <result column="audit_date" property="auditDate" />
+        <result column="creatorId" property="creatorId"/>
+        <result column="auditorId" property="auditorId"/>
+    </resultMap>
+    <update id="updateCheckTable" parameterType="java.util.HashMap">
+        update cmp_check_stock set check_bill_status = #{status}
+        <where>
+            id = #{id} and  ytenant_id = #{yTenantId}
+        </where>
+    </update>
+
+    <delete id="delCheckManage" parameterType="java.util.HashMap">
+        delete from  cmp_checkmanage
+        <where>
+            id = #{id}  and  ytenant_id = #{yTenantId}
+        </where>
+    </delete>
+
+    <delete id="delCheckManageDetail" parameterType="java.util.HashMap">
+        delete from  cmp_checkmanage_detail
+        <where>
+            mainid = #{mainid} and  ytenant_id = #{yTenantId}
+        </where>
+    </delete>
+    <select id="queryCheckManageByCheckId" resultMap="BaseResultMap">
+        select cmp_checkmanage.*
+        from cmp_checkmanage
+                 join cmp_checkmanage_detail on cmp_checkmanage.id = cmp_checkmanage_detail.mainid
+        where cmp_checkmanage_detail.checkid = #{checkId}
+        order by cmp_checkmanage_detail.pubts desc
+        limit 1
+    </select>
+</mapper>

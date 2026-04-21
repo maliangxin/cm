@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀)
+ -->
+<mapper namespace="com.yonyoucloud.fi.cmp.flowhandletype.mapper.FlowHandleTypeMapper">
+
+    <select id="queryFlowHandleTypeInitData" resultType="java.lang.Long" parameterType="java.util.Map">
+        select count(1) from cmp_flowhandletype where ((code in ('1','2','3') and type =1) or (code in ('1','2','3','4') and type=2)) and ytenant_id = #{ytenantId}
+    </select>
+
+    <delete id="deleteFlowHandleTypeData">
+        delete from cmp_flowhandletype where ((code in ('1','2','3') and type =1) or (code in ('1','2','3','4') and type=2)) and ytenant_id = #{ytenantId}
+    </delete>
+    <insert id="initFlowHandleTypeData" parameterType="java.util.Map">
+        insert into cmp_flowhandletype(id,code,name,sort_num,dr,enablestatus,isend,type,rightcardtype,extend,pubts,tenant_id,ytenant_id)
+        values (#{id101},'1','收付单据匹配关联',1,0,1,1,1,2,'{\"billnum\": \"cmp_fcdsusesettinglist\", \"serviceCode\": \"cmp_fcdsusesettinglist\", \"billtype\": \"ArchiveList\"}',#{pubts},#{tenantId},#{ytenantId}),
+        (#{id102},'2','收付单据生单',2,0,1,1,1,2,'{\"billnum\": \"cmp_fcdsusesettinglist\", \"serviceCode\": \"cmp_fcdsusesettinglist\", \"billtype\": \"ArchiveList\"}',#{pubts},#{tenantId},#{ytenantId}),
+        (#{id103},'3','业务凭据匹配关联',3,0,1,1,1,2,'{\"billnum\": \"cmp_fcdsusesettinglist\", \"serviceCode\": \"cmp_fcdsusesettinglist\", \"billtype\": \"ArchiveList\"}',#{pubts},#{tenantId},#{ytenantId}),
+        (#{id201},'1','收付单据匹配关联',1,0,1,1,2,2,'{\"billnum\": \"cmp_flowhandlesettinglist\", \"serviceCode\": \"cmp_flowhandlesettingist\", \"billtype\": \"ArchiveList\"}',#{pubts},#{tenantId},#{ytenantId}),
+        (#{id202},'2','业务凭据匹配关联',2,0,1,1,2,2,'{\"billnum\": \"cmp_flowhandlesettinglist\", \"serviceCode\": \"cmp_flowhandlesettingist\", \"billtype\": \"ArchiveList\"}',#{pubts},#{tenantId},#{ytenantId}),
+        (#{id203},'3','收付单据辨识生单',3,0,1,1,2,2,'{\"billnum\": \"cmp_flowhandlesettinglist\", \"serviceCode\": \"cmp_flowhandlesettingist\", \"billtype\": \"ArchiveList\"}',#{pubts},#{tenantId},#{ytenantId}),
+        (#{id204},'4','发布认领处理',4,0,1,1,2,2,'{\"billnum\": \"cmp_flowhandlesettinglist\", \"serviceCode\": \"cmp_flowhandlesettingist\", \"billtype\": \"ArchiveList\"}',#{pubts},#{tenantId},#{ytenantId});
+    </insert>
+
+    <select id="queryFlowhandleSettingInitData" resultType="java.lang.Long" parameterType="java.util.Map">
+        select count(1) from cmp_flowhandletype where code in ('1','2','3','4') and type=2 and ytenant_id = #{ytenantId}
+    </select>
+    <select id="queryFcdsUsesetTypeInitData" resultType="java.lang.Long" parameterType="java.util.Map">
+        select count(1) from cmp_flowhandletype where code in ('1','2','3') and type =1 and ytenant_id = #{ytenantId}
+    </select>
+    <delete id="deleteFlowhandleSettingData">
+        delete from cmp_flowhandletype where code in ('1','2','3','4') and type=2 and ytenant_id = #{ytenantId}
+    </delete>
+    <delete id="deleteFcdsUsesetTypeData">
+        delete from cmp_flowhandletype where code in ('1','2','3') and type =1 and ytenant_id = #{ytenantId}
+    </delete>
+
+    <insert id="initFlowhandleSettingData" parameterType="java.util.Map">
+        insert into cmp_flowhandletype(id,code,name,sort_num,dr,enablestatus,isend,type,rightcardtype,extend,pubts,tenant_id,ytenant_id)
+        values
+        (#{id201},'1','收付单据匹配关联',1,0,1,1,2,2,'{\"billnum\": \"cmp_flowhandlesettinglist\", \"serviceCode\": \"cmp_flowhandlesettingist\", \"billtype\": \"ArchiveList\"}',#{pubts},#{tenantId},#{ytenantId}),
+        (#{id202},'2','业务凭据匹配关联',2,0,1,1,2,2,'{\"billnum\": \"cmp_flowhandlesettinglist\", \"serviceCode\": \"cmp_flowhandlesettingist\", \"billtype\": \"ArchiveList\"}',#{pubts},#{tenantId},#{ytenantId}),
+        (#{id203},'3','收付单据辨识生单',3,0,1,1,2,2,'{\"billnum\": \"cmp_flowhandlesettinglist\", \"serviceCode\": \"cmp_flowhandlesettingist\", \"billtype\": \"ArchiveList\"}',#{pubts},#{tenantId},#{ytenantId}),
+        (#{id204},'4','发布认领处理',4,0,1,1,2,2,'{\"billnum\": \"cmp_flowhandlesettinglist\", \"serviceCode\": \"cmp_flowhandlesettingist\", \"billtype\": \"ArchiveList\"}',#{pubts},#{tenantId},#{ytenantId});
+    </insert>
+
+    <insert id="initFcdsUsesetTypeData" parameterType="java.util.Map">
+        insert into cmp_flowhandletype(id,code,name,sort_num,dr,enablestatus,isend,type,rightcardtype,extend,pubts,tenant_id,ytenant_id)
+        values (#{id101},'1','收付单据匹配关联',1,0,1,1,1,2,'{\"billnum\": \"cmp_fcdsusesettinglist\", \"serviceCode\": \"cmp_fcdsusesettinglist\", \"billtype\": \"ArchiveList\"}',#{pubts},#{tenantId},#{ytenantId}),
+               (#{id102},'2','收付单据生单',2,0,1,1,1,2,'{\"billnum\": \"cmp_fcdsusesettinglist\", \"serviceCode\": \"cmp_fcdsusesettinglist\", \"billtype\": \"ArchiveList\"}',#{pubts},#{tenantId},#{ytenantId}),
+               (#{id103},'3','业务凭据匹配关联',3,0,1,1,1,2,'{\"billnum\": \"cmp_fcdsusesettinglist\", \"serviceCode\": \"cmp_fcdsusesettinglist\", \"billtype\": \"ArchiveList\"}',#{pubts},#{tenantId},#{ytenantId});
+    </insert>
+</mapper>

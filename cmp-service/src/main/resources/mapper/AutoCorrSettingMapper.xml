@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yonyoucloud.fi.cmp.mapper.AutoCorrSettingMapper">
+
+    <!-- 对账单自动关联，按照规则条件匹配资金付款单明细数据 -->
+    <select id="getFundPaymentList" parameterType = "java.util.HashMap" resultType="java.util.HashMap">
+        select a.accentity, b.nori_amount as oriSum,d.bill_date as vouchdate,a.code,b.dept_id as dept,b.project_id as project,b.id,b.header_id as mainid
+        from stwb_apply_detail b
+        INNER JOIN stwb_settleapply a on a.id = b.header_id
+        INNER JOIN stwb_settleapply_fund_assistant d on a.id = d.id
+        INNER JOIN stwb_settleapplydetail_fund_assistant c on c.id = b.id
+        where
+        a.ytenant_id = #{ytenantid}
+        and b.ytenant_id = #{ytenantid}
+        and c.ytenant_id = #{ytenantid}
+        and d.ytenant_id = #{ytenantid}
+        <if test = "connetionWay == '0'.toString()">
+            and c.description like CONCAT('%', #{remark}, '%')
+        </if>
+        <if test = "connetionWay == '1'.toString()">
+            and c.description = #{remark}
+        </if>
+        <if test = "money !=null">
+            and b.nori_amount = #{money}
+        </if>
+        <if test = "connetionWay_OthBankNum == '1'.toString()">
+            and b.opp_bank_acct_no = #{othBankNum}
+        </if>
+
+        <if test = "connetionWay_OthBankNumName == '1'.toString()">
+            and b.opp_bank_acct_name = #{to_acct_name}
+        </if>
+
+        <if test = "connetionWay_OthBankNum == '0'.toString()">
+            and (b.opp_bank_acct_no is null or b.opp_bank_acct_name  = #{to_acct_name} )
+        </if>
+
+        <if test = "connetionWay_OthBankNumName == '0'.toString()">
+            and ( b.opp_bank_acct_name is null or b.opp_bank_acct_no = #{othBankNum})
+        </if>
+
+        <if test = "ourBankNum !=null">
+            and b.curr_bank_acct_id = #{ourBankNum}
+        </if>
+        and d.bill_date BETWEEN #{startTime} and #{endTime}
+        and a.verifystate = '0'
+        and c.association_status = 0
+        and a.ebiz_obj_type = 'cmp.fundpayment.FundPayment'
+    </select>
+
+    <!-- 对账单自动关联，按照规则条件匹配资金收款单明细数据 -->
+    <select id="getFundCollectionList" parameterType = "java.util.HashMap" resultType="java.util.HashMap">
+        select a.accentity, b.nori_amount as oriSum,d.bill_date as vouchdate,a.code,b.dept_id as dept,
+        b.project_id as project,b.id,b.header_id as mainid
+        from stwb_apply_detail b
+        INNER JOIN stwb_settleapply a on a.id = b.header_id
+        INNER JOIN stwb_settleapply_fund_assistant d on a.id = d.id
+        INNER JOIN stwb_settleapplydetail_fund_assistant c on c.id = b.id
+        where
+        a.ytenant_id = #{ytenantid}
+        and b.ytenant_id = #{ytenantid}
+        and c.ytenant_id = #{ytenantid}
+        and d.ytenant_id = #{ytenantid}
+        <if test = "connetionWay == '0'.toString()">
+            and c.description like CONCAT('%', #{remark}, '%')
+        </if>
+        <if test = "connetionWay == '1'.toString()">
+            and c.description = #{remark}
+        </if>
+        <if test = "money !=null">
+            and b.nori_amount = #{money}
+        </if>
+        <if test = "connetionWay_OthBankNum == '1'.toString()">
+            and b.opp_bank_acct_no = #{othBankNum}
+        </if>
+        <if test = "connetionWay_OthBankNum == '0'.toString()">
+            and (b.opp_bank_acct_no is null or b.opp_bank_acct_name = #{to_acct_name})
+        </if>
+
+        <if test = "connetionWay_OthBankNumName == '1'.toString()">
+            and b.opp_bank_acct_name = #{to_acct_name}
+        </if>
+
+        <if test = "connetionWay_OthBankNumName == '0'.toString()">
+            and (b.opp_bank_acct_name is null or b.opp_bank_acct_no = #{othBankNum})
+        </if>
+
+        <if test = "ourBankNum !=null">
+            and b.curr_bank_acct_id = #{ourBankNum}
+        </if>
+        and d.bill_date BETWEEN #{startTime} and #{endTime}
+        and a.verifystate = '0'
+        and c.association_status = 0
+        and a.ebiz_obj_type = 'cmp.fundcollection.FundCollection'
+    </select>
+
+    <!-- 对账单自动关联，按照规则条件匹配转账单明细数据  方向为：借：付-->
+    <select id="getTransferAccountList_Debit" parameterType = "java.util.HashMap" resultType="java.util.HashMap">
+        select accentity, oriSum, vouchdate, code, project, id
+        from cm_transfer_account
+        where
+        tenant_id = #{tenantid}
+        <if test = "connetionWay == '0'.toString()">
+            and description like CONCAT('%', #{remark}, '%')
+        </if>
+        <if test = "connetionWay == '1'.toString()">
+            and description = #{remark}
+        </if>
+        <if test = "money !=null">
+            and oriSum = #{money}
+        </if>
+        <!-- 收款方银行账户 == 对方银行账户  id -->
+        <if test = "othBankNum !=null">
+            and recbankaccount = #{othBankNum_id}
+        </if>
+        <!-- 付款方银行账户 == 我方银行账户  id -->
+        <if test = "ourBankNum !=null">
+            and paybankaccount = #{ourBankNum}
+        </if>
+        and vouchdate BETWEEN #{startTime} and #{endTime}
+        and verifystate != 3
+        and associationStatusPay = 0
+    </select>
+
+    <!-- 对账单自动关联，按照规则条件匹配转账单明细数据  方向为：贷：收-->
+    <select id="getTransferAccountList_Credit" parameterType = "java.util.HashMap" resultType="java.util.HashMap">
+        select accentity, oriSum, vouchdate, code, project, id
+        from cm_transfer_account
+        where
+        tenant_id = #{tenantid}
+        <if test = "connetionWay == '0'.toString()">
+            and description like CONCAT('%', #{remark}, '%')
+        </if>
+        <if test = "connetionWay == '1'.toString()">
+            and description = #{remark}
+        </if>
+        <if test = "money !=null">
+            and oriSum = #{money}
+        </if>
+        <!-- 付款方银行账户 == 对方银行账户  id-->
+        <if test = "othBankNum !=null">
+            and paybankaccount = #{othBankNum_id}
+        </if>
+        <!-- 收款方银行账户 == 我方银行账户  id-->
+        <if test = "ourBankNum !=null">
+            and recbankaccount = #{ourBankNum}
+        </if>
+        and vouchdate BETWEEN #{startTime} and #{endTime}
+        and verifystate != 3
+        and associationStatusCollect = 0
+    </select>
+
+    <!-- 对账单自动关联，银行对账单.银行对账码=外币兑换单.银行对账码  方向为：借：付-->
+    <select id="getCurrencyexchangeListOne_Debit" parameterType = "java.util.HashMap" resultType="java.util.HashMap">
+        select accentity, vouchdate, code, project, id,dept,purchaseamount,sellamount
+        from cmp_currencyexchange
+        where
+            tenant_id = #{tenantid}
+          and bankcheckcode = #{bankcheckcode}
+          and vouchdate BETWEEN #{startTime} and #{endTime}
+          and verifystate != 3
+          and associationStatusPay = 0
+    </select>
+
+    <!-- 对账单自动关联，按照规则条件匹配外币转账单明细数据  方向为：借：付-->
+    <select id="getCurrencyexchangeListTwo_Debit" parameterType = "java.util.HashMap" resultType="java.util.HashMap">
+        select accentity, vouchdate, code, project, id,dept,purchaseamount,sellamount
+        from cmp_currencyexchange
+        where
+        tenant_id = #{tenantid}
+        <if test = "connetionWay == '0'.toString()">
+            and summary like CONCAT('%', #{remark}, '%')
+        </if>
+        <if test = "connetionWay == '1'.toString()">
+            and summary = #{remark}
+        </if>
+        <if test = "money !=null">
+            and sellamount = #{money}
+        </if>
+        <!-- 收款方银行账户 == 对方银行账户  id -->
+        <if test = "othBankNum !=null">
+            and purchasebankaccount = #{othBankNum_id}
+        </if>
+        <!-- 付款方银行账户 == 我方银行账户  id -->
+        <if test = "ourBankNum !=null">
+            and sellbankno = #{ourBankNum}
+        </if>
+        and vouchdate BETWEEN #{startTime} and #{endTime}
+        and verifystate != 3
+        and associationStatusPay = 0
+    </select>
+
+
+    <!-- 对账单自动关联，按照规则条件匹配外币转账单明细数据  方向为：贷：收-->
+    <select id="getCurrencyexchangeListOne_Credit" parameterType = "java.util.HashMap" resultType="java.util.HashMap">
+        select accentity, vouchdate, code, project, id,dept,purchaseamount,sellamount
+        from cmp_currencyexchange
+        where
+            tenant_id = #{tenantid}
+          and bankcheckcode = #{bankcheckcode}
+          and vouchdate BETWEEN #{startTime} and #{endTime}
+          and verifystate != 3
+          and associationStatusCollect = 0
+    </select>
+
+
+    <!-- 对账单自动关联，按照规则条件匹配外币转账单明细数据  方向为：贷：收-->
+    <select id="getCurrencyexchangeListTwo_Credit" parameterType = "java.util.HashMap" resultType="java.util.HashMap">
+        select accentity, vouchdate, code, project, id,dept,purchaseamount,sellamount
+        from cmp_currencyexchange
+        where
+        tenant_id = #{tenantid}
+        <if test = "connetionWay == '0'.toString()">
+            and summary like CONCAT('%', #{remark}, '%')
+        </if>
+        <if test = "connetionWay == '1'.toString()">
+            and summary = #{remark}
+        </if>
+        <if test = "money !=null">
+            and purchaseamount = #{money}
+        </if>
+        <!-- 付款方银行账户 == 对方银行账户  id-->
+        <if test = "othBankNum !=null">
+            and sellbankno = #{othBankNum_id}
+        </if>
+        <!-- 收款方银行账户 == 我方银行账户  id-->
+        <if test = "ourBankNum !=null">
+            and purchasebankaccount = #{ourBankNum}
+        </if>
+        and vouchdate BETWEEN #{startTime} and #{endTime}
+        and verifystate != 3
+        and associationStatusCollect = 0
+    </select>
+</mapper>

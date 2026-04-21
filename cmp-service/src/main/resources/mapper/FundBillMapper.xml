@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yonyoucloud.fi.cmp.mapper.FundBillMapper">
+
+    <update id="updateTransNumberByDetailId">
+        update ${tableName} set transNumber = #{transNumber},
+                                settleSuccessTime = #{settleSuccessTime},
+                                actual_settlement_exchange_rate_type = #{actualSettlementExchangeRateType},
+                                actual_settlement_amount = #{actualSettlementAmount},
+                                actual_settlement_exchange_rate = #{actualSettlementExchangeRate},
+                                pubts = pubts where ytenant_id = #{ytenantId} and id= #{detailId}
+    </update>
+
+    <update id="updateTransNumberByDetailIdMargin">
+        update ${tableName} set transNumber = #{transNumber} where ytenant_id = #{ytenantId} and id= #{detailId}
+    </update>
+
+    <update id="updateTransNumberByDetailIdForeignpayment">
+        update ${tableName} set transNumber = #{transNumber},
+                                settleSuccessTime = #{settleSuccessTime},
+                                settle_exchange_rate_type = #{actualSettlementExchangeRateType},
+                                settle_amount = #{actualSettlementAmount},
+                                settle_exchange_rate = #{actualSettlementExchangeRate},
+                                pubts = pubts where ytenant_id = #{ytenantId} and id= #{detailId}
+    </update>
+
+    <update id="updateFundBillSubById">
+        update ${tableName} set
+        <trim suffixOverrides=",">
+            pubts = pubts,
+            <if test="settlestatus != null" >
+                settle_status = #{settlestatus},
+            </if>
+            <if test="isToPushCspl != null" >
+                isToPushCspl = #{isToPushCspl},
+            </if>
+            <if test="refundSum != null" >
+                refundSum = #{refundSum},
+            </if>
+            <if test="settleerrorSum !=null" >
+                settleerrorSum = #{settleerrorSum},
+            </if>
+            <if test="settlesuccessSum !=null" >
+                settlesuccessSum = #{settlesuccessSum},
+            </if>
+            <if test="isOccupyBudget !=null" >
+                is_occupy_budget = #{isOccupyBudget},
+            </if>
+            <if test="billClaimId !=null" >
+                billClaimId = #{billClaimId},
+            </if>
+            <if test="bankReconciliationId !=null" >
+                bankReconciliationId = #{bankReconciliationId},
+            </if>
+            <if test="associationStatus !=null" >
+                associationStatus = #{associationStatus},
+            </if>
+        </trim>
+        where ytenant_id = #{ytenantId} and id = #{id}
+    </update>
+
+
+    <update id="clearRelationFundBillSubById">
+        update ${tableName} set
+            pubts = pubts,
+            billClaimId = null,
+            bankReconciliationId = null,
+            associationStatus = 0
+        where ytenant_id = #{ytenantId} and id = #{id}
+    </update>
+
+
+    <update id="clearRelationBankreconciliationId">
+        update ${tableName} set
+                                pubts = pubts,
+                                bankReconciliationId = null
+        where ytenant_id = #{ytenantId} and id = #{id}
+    </update>
+
+
+    <update id="updateSmartCheckNoById">
+        update ${tableName} set smartcheckno = #{smartcheckno},pubts = pubts where ytenant_id = #{ytenantId} and id= #{id}
+    </update>
+
+</mapper>

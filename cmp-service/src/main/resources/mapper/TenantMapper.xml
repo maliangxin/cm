@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yonyoucloud.fi.cmp.mapper.TenantMapper">
+    <select id="queryAllTenant"  resultType="com.yonyoucloud.fi.cmp.bankreceipt.dto.TenantDTO">
+        select
+           id as tenantId,
+           ytenant_id as ytenantId
+        from tenant
+    </select>
+</mapper>

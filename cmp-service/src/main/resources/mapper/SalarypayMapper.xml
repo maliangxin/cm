@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yonyoucloud.fi.cmp.mapper.SalarypayMapper">
+
+    <update id="batchUpdateSalarypay" parameterType="java.util.List">
+        <foreach collection="list" item="paybill" index="index" open="" close="" separator=";">
+            UPDATE cmp_salarypay
+            <set>
+                <!--<choose>
+                    <when test=""></when>
+                    <otherwise></otherwise>
+                </choose>-->
+                voucherstatus =
+                (
+                    case when voucherstatus = #{paybill.oldvoucherstatus}  then #{paybill.voucherstatus}
+                    else  voucherstatus end
+                ),
+                paystatus = #{paybill.paystatus},
+                settleuserId = #{paybill.settleuserId},
+                settleuser = #{paybill.settleuser},
+                settledate = #{paybill.settledate},
+                settlestatus = #{paybill.settlestatus},
+                successmoney = #{paybill.successmoney},
+                olcsuccessmoney = #{paybill.olcsuccessmoney},
+                successnum = #{paybill.successnum},
+                failnum = #{paybill.failnum},
+                failmoney = #{paybill.failmoney},
+                olcfailmoney = #{paybill.olcfailmoney}
+            </set>
+            <where>
+                id = #{paybill.id}
+            </where>
+        </foreach>
+    </update>
+
+    <update id="updatePayStatus" parameterType="java.util.HashMap">
+        update cmp_salarypay
+        <set>
+            pubts = pubts,
+            paystatus = #{paystatus}
+        </set>
+        <where>
+            paystatus = #{item} and
+            porderid = #{porderId}  and
+            id = #{id} and tenant_id = #{tenant_id}
+        </where>
+
+    </update>
+
+
+    <update id="updateBeforePreOrder" parameterType="java.util.HashMap">
+        update cmp_salarypay
+        <set>
+            paystatus = 6
+        </set>
+        <where>
+            id = #{id} and paystatus in (0,2,4) and tenant_id = #{tenant_id}
+        </where>
+    </update>
+
+
+    <update id="updateAfterPreOrder" parameterType="java.util.HashMap">
+        update cmp_salarypay
+        <set>
+            paystatus = #{paystatus},porderid = #{porderid},paymessage =  #{paymessage}
+        </set>
+        <where>
+            id = #{id} and paystatus in (0,2,4) and tenant_id = #{tenant_id}
+        </where>
+    </update>
+
+
+
+</mapper>
