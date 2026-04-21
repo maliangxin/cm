@@ -1,4 +1,4 @@
-package journalbill;
+package com.yonyou.yonbip.ctm.cmp.models.journalbill;
 
 import com.yonyou.ucf.mdd.biz.ucfbase.ucfbaseItf.IAutoCode;
 import com.yonyou.ucf.mdd.biz.ucfbase.ucfbaseItf.IYTenant;

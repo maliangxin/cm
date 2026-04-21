@@ -1,4 +1,4 @@
-package service;
+package com.yonyou.yonbip.ctm.cmp.service;
 
 import com.yonyou.cloud.middleware.rpc.RemoteCall;
 import com.yonyou.ucf.mdd.ext.bill.dto.BillDataDto;

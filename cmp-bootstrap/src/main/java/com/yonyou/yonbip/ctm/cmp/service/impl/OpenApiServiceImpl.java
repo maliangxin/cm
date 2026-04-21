@@ -1,4 +1,4 @@
-package service.impl;
+package com.yonyou.yonbip.ctm.cmp.service.impl;
 
 import com.google.common.collect.Lists;
 import com.yonyou.iuap.ucf.common.i18n.MessageUtils;

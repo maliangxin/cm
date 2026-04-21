@@ -1,4 +1,4 @@
-package openapi;
+package com.yonyou.yonbip.ctm.cmp.controller.openapi;
 
 import com.yonyou.yonbip.ctm.json.CtmJSONObject;
 import com.yonyou.iuap.ucf.common.i18n.MessageUtils;
