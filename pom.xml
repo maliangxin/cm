@@ -21,15 +21,10 @@
     </properties>
 
     <modules>
-        <module>cmp-meta-resources</module>
         <module>cmp-models</module>
-        <module>cmp-api</module>
-        <module>cmp-api-inner</module>
         <module>cmp-service</module>
         <module>cmp-web</module>
-        <module>cmp-report</module>
         <module>cmp-bootstrap</module>
-        <module>cmp-sdk</module>
     </modules>
 
     <dependencies>

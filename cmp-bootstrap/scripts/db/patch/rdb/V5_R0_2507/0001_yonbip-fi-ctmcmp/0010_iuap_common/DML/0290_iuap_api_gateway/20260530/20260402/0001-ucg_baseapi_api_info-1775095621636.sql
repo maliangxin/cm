@@ -1,0 +1,17 @@
+-- iuap_ipaas 
+-- ----------------------------
+-- 创建时间：2026-04-02-10:07:01
+-- 创建人：wmq
+-- 查询条件：{"itemKey":"iuap-api-gateway_apiPubSys","projectName":"cmp","queryInfoList":[{"paramName":"api_id","paramValue":"2401384874613145608"}],"profile":"基准环境","dbType":"MYSQL","queryId":"b8ec52c95dfd4d299a726b8b47575485","needOriginData":false,"extraData":{}}
+-- 工具服务所在环境: test
+-- ----------------------------
+-- ----------------------------
+-- ucg_baseapi_api_info
+-- ----------------------------
+DELETE FROM ucg_baseapi_api_info WHERE id IN ('2401384874613145608');
+
+-- beginBatch
+REPLACE INTO  `ucg_baseapi_api_info`(`id`,`name`,`gmt_update`,`api_classify_id`,`api_classify_name`,`description`,`auth`,`body_passthrough`,`complete_proxy_url`,`connect_url`,`create_time`,`publish_time`,`handler`,`http_request_type`,`open_api`,`preset`,`product_id`,`proxy_url`,`request_params_demo`,`request_protocol`,`service_http_method`,`gmt_create`,`approval_status`,`publish_status`,`rpc_app_name`,`rpc_service_name`,`rpc_method_name`,`rpc_service_url`,`sort`,`dr`,`ma`,`bill_no`,`domain_code`,`isv_id`,`tenant_id`,`app_code`,`return_format_type`,`open_mode`,`function_id`,`response_result_pass_through`,`content_type`,`path_match`,`path_join`,`health_exam`,`health_status`,`time_out`,`doc_url`,`old_complete_proxy_url`,`create_user`,`mock`,`mock_time_out`,`custom_url`,`fixed_url`,`idempotent`,`ucg_schema`,`version`,`ytenant_id`,`api_code`,`routing_stgy`,`bidirectional_ssl`,`update_user_id`,`update_user_name`,`param_is_force`,`micro_service_code`,`array_param`,`file_size`,`param_transfer_mode`,`user_id_passthrough`,`scene`,`biz_obj_uri`,`biz_obj_operation_type`,`applicationCode`,`privacy_category`,`privacy_level`,`api_designed`,`service_type`,`integrate_scheme_code`,`integrate_scheme_name`,`integrate_object_code`,`integrate_object_name`,`integrate_object_created_type`,`return_integ_obj_id`,`return_integ_obj_name`,`api_def_id`,`param_ext_biz_obj_code`,`param_ext_biz_obj_name`,`param_ext_request`,`param_ext_response`,`param_ext_in_extend_key`,`open_scene`,`integration_scene`,`api_type`,`token_check_type`,`create_user_name`,`enable_multi`,`multi_field`,`domain_app_code`) VALUES 
+('2401384874613145608','货币兑换结果回传接口','2026-04-01 17:49:26.000','2391062161241669639','货币兑换',NULL,1,NULL,'/yonbip/ctm/commonapi/updateCurrDataAndGeneratorVoucher',NULL,NULL,'2026-04-01 17:49:26','openapi','POST',1,1,'6588ea823491428d8b990aa7fc8fb00d','/yonbip/ctm/commonapi/updateCurrDataAndGeneratorVoucher','Url: /yonbip/ctm/commonapi/updateCurrDataAndGeneratorVoucher?access_token=访问令牌\nBody: {\n	"data": [\n		{\n			"id": "1905863330859843588",\n			"contractNo": "30859843588",\n			"settlestatus": 3,\n			"purchaseamount": 10.01,\n			"sellamount": 10.01,\n			"exchangerate": 1.3,\n			"settledate": "2023-01-24 12:12:12"\n		}\n	],\n	"characterDef": {}\n}','HTTP','GET','2025-11-14 16:15:11.000',1,1,NULL,NULL,NULL,NULL,2,0,0,NULL,NULL,'75c13acc-ae53-4694-9a6e-3ddcce26d7f3','0',NULL,'JSON',NULL,NULL,0,NULL,0,0,0,0,'30',NULL,'/yonbip/ctm/commonapi/updateCurrDataAndGeneratorVoucher','ce9f7fd2-0f45-42cb-bfa2-8598566a1afe',0,'0','commonapi/updateCurrDataAndGeneratorVoucher','/yonbip/ctm/','non','HTTPS',NULL,'0','2401384874613145608',0,0,'ce9f7fd2-0f45-42cb-bfa2-8598566a1afe','wmq',1,'domain.yonbip-fi-ctmcmp',0,0,2,1,1,'','','CM',1,0,0,0,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,NULL,0,0,0,1,1,0,0,'昵称-张梦',0,'','ctm-cmp.cmp_currencyexchange') ;
+-- endBatch
+
