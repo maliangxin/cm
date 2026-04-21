@@ -1,4 +1,4 @@
-package com.yonyoucloud.fi.cmp.openapi.service.impl;
+package service.impl;
 
 import com.google.common.collect.Lists;
 import com.yonyou.iuap.ucf.common.i18n.MessageUtils;
@@ -332,7 +332,7 @@ public class OpenApiServiceImpl implements OpenApiService {
             midvoucherstate = "success";
         }
         String sql ="select pb.id from cmp_paybill pb where pb.srcbillid = #{0}";
-        Map<String,Object> parameters=new java.util.HashMap<>();
+        Map<String,Object> parameters=new HashMap<>();
         parameters.put("0", srcbillid);
         CommonSqlExecutor metaDaoSupport = new CommonSqlExecutor(AppContext.getSqlSession());
         List<Map<String,Object>> list= metaDaoSupport.executeSelectSql(sql,parameters);

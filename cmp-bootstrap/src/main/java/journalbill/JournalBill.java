@@ -1,4 +1,4 @@
-package com.yonyoucloud.fi.cmp.journalbill;
+package journalbill;
 
 import com.yonyou.ucf.mdd.biz.ucfbase.ucfbaseItf.IAutoCode;
 import com.yonyou.ucf.mdd.biz.ucfbase.ucfbaseItf.IYTenant;

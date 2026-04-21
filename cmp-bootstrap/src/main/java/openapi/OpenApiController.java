@@ -1,4 +1,4 @@
-package com.yonyoucloud.fi.cmp.controller.openapi;
+package openapi;
 
 import com.yonyou.yonbip.ctm.json.CtmJSONObject;
 import com.yonyou.iuap.ucf.common.i18n.MessageUtils;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
 
 import static com.yonyou.yonbip.ctm.error.CommonCtmErrorCode.REMOTE_SERVICE_REST_EXCEPTION;
 

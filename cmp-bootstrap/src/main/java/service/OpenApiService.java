@@ -1,11 +1,8 @@
-package com.yonyoucloud.fi.cmp.api.openapi;
+package service;
 
 import com.yonyou.cloud.middleware.rpc.RemoteCall;
 import com.yonyou.ucf.mdd.ext.bill.dto.BillDataDto;
 import com.yonyou.yonbip.ctm.json.CtmJSONObject;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by sz on 2019/4/20 0020.
